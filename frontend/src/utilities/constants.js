@@ -103,3 +103,6 @@ export const ALLOW_FILE_UPLOAD = false; // Set to true to enable file upload fea
 export const ALLOW_VOICE_RECOGNITION = true; // Set to true to enable voice recognition feature
 export const ALLOW_MULTLINGUAL = true; // Set to true to enable multilingual support
 export const ALLOW_LANDING_PAGE = true; // Set to true to enable the landing page
+
+// VERY IMPORTANT
+// REMOVE THE POST PROCESSING IN SPEECH RECOGNITION TO DETECT CALVIN AS KELYVIN IN SPEECH RECOGNITION COMPONENT

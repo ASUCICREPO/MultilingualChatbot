@@ -56,6 +56,7 @@ function SpeechRecognitionComponent() {
       for (let i = 0; i < event.results.length; i++) {
         text += event.results[i][0].transcript;
       }
+      text = text.replace(/\b(Calvin|Kelvin)\b/gi, 'Kelvyn');
       setTranscript(text);
     };
 
