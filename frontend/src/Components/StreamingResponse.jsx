@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { Grid, Avatar, Typography } from "@mui/material";
 import BotAvatar from "../Assets/BotAvatar.svg";
 import { WEBSOCKET_API } from "../utilities/constants";
+import { useLanguage } from '../utilities/LanguageContext'; 
 
 const StreamingMessage = ({ initialMessage, setProcessing }) => {
   const [responses, setResponses] = useState([]);
   const ws = useRef(null);
   const messageBuffer = useRef(""); // Buffer to hold incomplete JSON strings
+  const { language } = useLanguage();
 
   useEffect(() => {
     // Initialize WebSocket connection
@@ -15,7 +17,7 @@ const StreamingMessage = ({ initialMessage, setProcessing }) => {
     ws.current.onopen = () => {
       console.log("WebSocket Connected");
       // Send initial message
-      ws.current.send(JSON.stringify({ action: "sendMessage", prompt: initialMessage }));
+      ws.current.send(JSON.stringify({ action: "sendMessage", prompt: initialMessage, "Language" : language}));
     };
 
     ws.current.onmessage = (event) => {
