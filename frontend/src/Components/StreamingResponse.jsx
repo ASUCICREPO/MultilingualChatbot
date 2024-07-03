@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { Grid, Avatar, Typography } from "@mui/material";
 import BotAvatar from "../Assets/BotAvatar.svg";
 import { WEBSOCKET_API } from "../utilities/constants";
-import { useLanguage } from '../utilities/LanguageContext'; 
+import { useLanguage } from "../utilities/LanguageContext"; 
+import { ALLOW_MARKDOWN_BOT } from "../utilities/constants";
+import ReactMarkdown from "react-markdown";
 
 const StreamingMessage = ({ initialMessage, setProcessing }) => {
   const [responses, setResponses] = useState([]);
@@ -17,7 +19,7 @@ const StreamingMessage = ({ initialMessage, setProcessing }) => {
     ws.current.onopen = () => {
       console.log("WebSocket Connected");
       // Send initial message
-      ws.current.send(JSON.stringify({ action: "sendMessage", prompt: initialMessage, "Language" : language}));
+      ws.current.send(JSON.stringify({ action: "sendMessage", prompt: initialMessage, Language: language }));
     };
 
     ws.current.onmessage = (event) => {
@@ -26,7 +28,6 @@ const StreamingMessage = ({ initialMessage, setProcessing }) => {
         const parsedData = JSON.parse(messageBuffer.current); // Try to parse the full buffer
         
         if (parsedData.type === "end") {
-          // Implement your logic here
           setProcessing(false); // Set processing to false when parsing is complete
           console.log("end of conversation");
         }
@@ -35,14 +36,15 @@ const StreamingMessage = ({ initialMessage, setProcessing }) => {
           setResponses((prev) => [...prev, parsedData.text]);
         }
 
-        // Update the previous data type
-        messageBuffer.current = ""; // Clear buffer on successful parse
+        // Clear buffer on successful parse
+        messageBuffer.current = "";
       } catch (e) {
         if (e instanceof SyntaxError) {
           console.log("Received incomplete JSON, waiting for more data...");
         } else {
           console.error("Error processing message: ", e);
-          messageBuffer.current = ""; // Clear buffer if error is not related to JSON parsing
+          // Clear buffer if error is not related to JSON parsing
+          messageBuffer.current = "";
         }
       }
     };
@@ -59,22 +61,32 @@ const StreamingMessage = ({ initialMessage, setProcessing }) => {
       }
     };
 
+    // Cleanup function to close WebSocket connection
     return () => {
       if (ws.current) {
         ws.current.close();
       }
     };
-  }, [initialMessage, setProcessing]
-); // Add setProcessing to the dependency array
+  }, [initialMessage, setProcessing]);
 
   return (
     <Grid container direction="row" justifyContent="flex-start" alignItems="flex-end">
       <Grid item>
         <Avatar alt="Bot Avatar" src={BotAvatar} />
       </Grid>
-      <Grid item className="botMessage" sx={{ backgroundColor: (theme) => theme.palette.background.botMessage }}>
-        <Typography variant="body2">{responses.join("")}</Typography>
-      </Grid>
+      {ALLOW_MARKDOWN_BOT ? (
+        <Grid item className="botMessage" sx={{ backgroundColor: (theme) => theme.palette.background.botMessage }}>
+          <Typography variant="body2" sx={{ "& li": { color: "black !important" } }}>
+            <ReactMarkdown>{responses.join("")}</ReactMarkdown>
+          </Typography>
+        </Grid>
+      ) : (
+        <Grid item className="botMessage" sx={{ backgroundColor: (theme) => theme.palette.background.botMessage }}>
+          <Typography variant="body2" sx={{ "& li": { color: "black !important" } }}>
+            <ReactMarkdown>{responses.join("")}</ReactMarkdown>
+          </Typography>
+        </Grid>
+      )}
     </Grid>
   );
 };
