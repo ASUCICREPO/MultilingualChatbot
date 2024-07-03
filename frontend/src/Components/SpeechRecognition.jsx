@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import IconButton from '@mui/material/IconButton';
 import MicIcon from '@mui/icons-material/Mic';
 import { styled, keyframes } from '@mui/material/styles';
@@ -37,6 +37,7 @@ function SpeechRecognitionComponent() {
   const { language } = useLanguage();
   const { setTranscript, isListening, setIsListening } = useTranscript();
   const recognitionRef = useRef(null);
+  const [interimTranscript, setInterimTranscript] = useState("");
 
   useEffect(() => {
     if (!SpeechRecognition) {
@@ -57,7 +58,7 @@ function SpeechRecognitionComponent() {
         text += event.results[i][0].transcript;
       }
       text = text.replace(/\b(Calvin|Kelvin)\b/gi, 'Kelvyn');
-      setTranscript(text);
+      setInterimTranscript(text);
     };
 
     recognition.onerror = (event) => {
@@ -71,7 +72,7 @@ function SpeechRecognitionComponent() {
     };
 
     return () => {
-      recognition.stop();
+      if (recognition) recognition.stop();
     };
   }, [language, setTranscript, setIsListening]);
 
@@ -85,7 +86,13 @@ function SpeechRecognitionComponent() {
     if (isListening) {
       recognition.stop();
       console.log("Recognition stopped");
+
+      setTimeout(() => {
+        setTranscript(interimTranscript); // Set the transcript after a delay
+      }, 1500); // Delay of 1500ms
     } else {
+      setTranscript("");
+      setInterimTranscript("");
       recognition.start();
       console.log("Recognition started");
     }

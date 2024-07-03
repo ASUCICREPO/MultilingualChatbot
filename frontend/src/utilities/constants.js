@@ -107,3 +107,6 @@ export const ALLOW_LANDING_PAGE = true; // Set to true to enable the landing pag
 export const ALLOW_MARKDOWN_BOT = true; // Set to true to enable markdown support for bot messages
 // VERY IMPORTANT
 // REMOVE THE POST PROCESSING IN SPEECH RECOGNITION TO DETECT CALVIN AS KELYVIN IN SPEECH RECOGNITION COMPONENT
+// ALSO update the title in the index.html file in the public folder
+// Change the public favicon.ico to the new favicon.ico that you would like to use
+
