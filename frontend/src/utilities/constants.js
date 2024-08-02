@@ -93,7 +93,7 @@ export const LANDING_PAGE_TEXT = {
 // --------------------------------------------------------------------------------------------------------//
 
 // API endpoints
-export const CHAT_API = process.env.REACT_APP_CHAT_API; // URL for the chat API endpoint
+export const CHAT_API = "";// process.env.REACT_APP_CHAT_API; // URL for the chat API endpoint
 export const WEBSOCKET_API = process.env.REACT_APP_WEBSOCKET_API; // URL for the WebSocket API endpoint
 
 // --------------------------------------------------------------------------------------------------------//
@@ -101,7 +101,7 @@ export const WEBSOCKET_API = process.env.REACT_APP_WEBSOCKET_API; // URL for the
 
 // Features
 export const ALLOW_FILE_UPLOAD = false; // Set to true to enable file upload feature
-export const ALLOW_VOICE_RECOGNITION = true; // Set to true to enable voice recognition feature
+export const ALLOW_VOICE_RECOGNITION = false; // Set to true to enable voice recognition feature
 export const ALLOW_MULTLINGUAL = true; // Set to true to enable multilingual support
 export const ALLOW_LANDING_PAGE = true; // Set to true to enable the landing page
 export const ALLOW_MARKDOWN_BOT = true; // Set to true to enable markdown support for bot messages
